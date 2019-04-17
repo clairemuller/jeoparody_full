@@ -1,0 +1,75 @@
+@font-face {
+  font-family: Korinna; /* for clue cards */
+  src: url(fonts/korinan.ttf);
+  font-family: Optima; /* for clue cards */
+  src: url(fonts/Optima.ttc);
+  font-family: Gyparody; /* for Jeopardy logo */
+  src: url(fonts/gyparody.ttf);
+  font-family: Swiss-911; /* for categories & dollar amounts */
+  src: url(fonts/swiss911.ttf);
+}
+
+* {
+  box-sizing: border-box;
+  background-color: #000000;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%; /* full window width */
+  text-align: center;
+}
+
+#wrapper {
+}
+
+div.column {
+  display: inline-block;
+  width: 20%; /* of wrapper width */
+  margin: auto;
+}
+
+div.column div {
+  border: 1px solid #000000;
+  height: 110px;
+  margin: 1%;
+  font-family: Swiss-911;
+  background-color: #0731af;
+}
+
+div.title {
+  color: #ffffff;
+  font-size: 35px;
+  text-shadow: 2px 2px #000000;
+}
+
+div.clue {
+  color: #ead81c;
+  font-size: 90px;
+  text-shadow: 5px 5px #000000;
+}
+
+.clue:hover {
+  cursor: pointer;
+}
+
+.overlay {
+  display: none; /* hidden by default */
+  position: fixed;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+  width: 100%;
+  /* overflow: auto; */
+  transform: translate(-50%,-50%);
+}
+
+.overlay-content {
+  font-family: Optima;
+  font-size: 70px;
+  color: #ffffff;
+  /* padding: 15%; */
+  margin: 15% auto;
+}
