@@ -10,7 +10,7 @@ fetch('http://localhost:3000/categories')
 .then(res => res.json())
 .then(categories => {
   introDisplay(intro);
-  setTimeout(() => renderNewGame(categories), 5000)
+  setTimeout(() => renderNewGame(categories), 5000);
 });
 
 // CREATE CLUES FOR COLUMN
@@ -43,18 +43,20 @@ function renderClues(category, column) {
   }
 }
 
-// REMOVE HTML TAGS
+// REMOVE HTML TAGS & ESCAPE CHARS
 function removeHTML(element) {
   if (element.includes('<i>')) {
-    element = element.replace(/<[^>]*>/g, '')
-  } else if (element.includes("\'")) {
-    element = element.replace("\'", "'")
+    element = element.replace(/<[^>]*>/g, '');
   }
+  if (element.includes("\\'")) {
+    element = element.replace("\\'", "'");
+  }
+  return element;
 }
 
 // ON CLICK DISPLAY QUESTION
 function displayQuestion(clue) {
-  removeHTML(clue.question)
+  clue.question = removeHTML(clue.question)
   wrapper.style.display = 'none';
   overlay.style.display = 'block';
   overlayContent.innerText = clue.question.toUpperCase();
@@ -63,7 +65,7 @@ function displayQuestion(clue) {
 
 // AFTER 5 SECONDS DISPLAY ANSWER
 function displayAnswer(clue) {
-  removeHTML(clue.answer)
+  clue.answer = removeHTML(clue.answer)
   overlayContent.innerText = clue.answer.toUpperCase();
   setTimeout(() => finishClue(), 2000);
 }
