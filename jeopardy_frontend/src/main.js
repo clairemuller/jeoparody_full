@@ -4,26 +4,14 @@ overlay.classList.add('overlay');
 const overlayContent = document.createElement('div');
 overlayContent.classList.add('overlay-content');
 overlay.appendChild(overlayContent);
+let intro = document.createElement('div');
 
 fetch('http://localhost:3000/categories')
 .then(res => res.json())
 .then(categories => {
-  renderNewGame(categories);
+  introDisplay(intro);
+  setTimeout(() => renderNewGame(categories), 5000)
 });
-
-// CREATE NEW GAME BOARD
-function renderNewGame(categories) {
-  categories = fixClueCount(categories);
-  categories = getFive(categories);
-  categories.forEach(category => {
-    if (category.clues.length > 5) {
-      category.clues = getFive(category.clues);
-    }
-    return category;
-  })
-  categories.forEach(category =>
-    renderColumn(category));
-}
 
 // CREATE CLUES FOR COLUMN
 function renderClues(category, column) {
@@ -48,28 +36,66 @@ function renderClues(category, column) {
       clueDiv.classList.add('clicked')
 
       displayQuestion(clue);
-      setTimeout(() => displayAnswer(clue), 1000);
+      setTimeout(() => displayAnswer(clue), 2000);
     })
 
     column.appendChild(clueDiv);
   }
 }
 
+// REMOVE HTML TAGS
+function removeHTML(element) {
+  if (element.includes('<i>')) {
+    element = element.replace(/<[^>]*>/g, '')
+  } else if (element.includes("\'")) {
+    element = element.replace("\'", "'")
+  }
+}
+
+// ON CLICK DISPLAY QUESTION
 function displayQuestion(clue) {
+  removeHTML(clue.question)
   wrapper.style.display = 'none';
   overlay.style.display = 'block';
   overlayContent.innerText = clue.question.toUpperCase();
   document.body.appendChild(overlay);
 }
 
+// AFTER 5 SECONDS DISPLAY ANSWER
 function displayAnswer(clue) {
+  removeHTML(clue.answer)
   overlayContent.innerText = clue.answer.toUpperCase();
-  setTimeout(() => finishClue(), 1000);
+  setTimeout(() => finishClue(), 2000);
 }
 
+// BRING BACK GAME BOARD
 function finishClue() {
   document.body.removeChild(overlay);
   wrapper.style.display = 'block';
+}
+
+///////////////// GAME SET UP /////////////////
+
+// DISPLAY JEOPARDY INTRO
+function introDisplay(intro) {
+  intro.classList.add('intro');
+  intro.textContent = 'JEOPARDY';
+  document.body.appendChild(intro);
+}
+
+// CREATE NEW GAME BOARD
+function renderNewGame(categories) {
+  document.body.removeChild(intro);
+  categories = fixClueCount(categories);
+  categories = getFive(categories);
+  categories.forEach(category => {
+    if (category.clues.length > 5) {
+      category.clues = getFive(category.clues);
+    }
+    return category;
+  })
+  categories.forEach(category =>
+    renderColumn(category));
 }
 
 // CREATE COLUMN

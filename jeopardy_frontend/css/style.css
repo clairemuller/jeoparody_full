@@ -43,6 +43,7 @@ div.column div {
   color: #ffffff;
   font-size: 32px;
   text-shadow: 2px 2px #000000;
+  padding: 3%;
 }
 
 .clue {
@@ -53,7 +54,7 @@ div.column div {
 
 .clicked {
   color: #0731af;
-  text-shadow: 5px 5px #0731af;
+  text-shadow: 0px 0px #0731af;
 }
 
 .clue:hover {
@@ -68,7 +69,7 @@ div.column div {
   left: 50%;
   height: 100%;
   width: 100%;
-  /* overflow: auto; */
+  overflow: auto;
   transform: translate(-50%,-50%);
 }
 
@@ -78,4 +79,19 @@ div.column div {
   color: #ffffff;
   /* padding: 15%; */
   margin: 15% 10%;
+}
+
+.intro {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+  width: 100%;
+  transform: translate(-50%,-50%);
+  font-family: Gyparody;
+  font-size: 200px;
+  color: #ffffff;
+  margin: 15% auto;
 }
