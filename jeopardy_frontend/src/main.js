@@ -37,8 +37,7 @@ function renderClues(category, column) {
   let dollar = 0;
   for (let i = 0; i < category.clues.length; i++) {
     dollar += 200;
-    const question = category.clues[i].question;
-    const answer = category.clues[i].answer;
+    const clue = category.clues[i];
 
     // ADD DOLLAR AMOUNT
     const clueDiv = document.createElement('div');
@@ -48,19 +47,29 @@ function renderClues(category, column) {
     // ADD EVENT LISTENER
     clueDiv.addEventListener('click', () => {
       clueDiv.innerText = '';
-      wrapper.style.display = 'none'
-      overlay.style.display = 'block';
-      overlayContent.innerText = question.toUpperCase();
-      document.body.appendChild(overlay);
-
-
-      // questionDiv.innerText = question.toUpperCase();
-      // questionDiv.style.display = 'block';
-      // document.body.appendChild(questionDiv);
+      displayQuestion(clue);
+      setTimeout(() => displayAnswer(clue), 2000);
     })
 
     column.appendChild(clueDiv);
   }
+}
+
+function displayQuestion(clue) {
+  wrapper.style.display = 'none';
+  overlay.style.display = 'block';
+  overlayContent.innerText = clue.question.toUpperCase();
+  document.body.appendChild(overlay);
+}
+
+function displayAnswer(clue) {
+  overlayContent.innerText = clue.answer.toUpperCase();
+  setTimeout(() => finishClue(), 2000);
+}
+
+function finishClue() {
+  document.body.removeChild(overlay);
+  wrapper.style.display = 'block';
 }
 
 // CREATE COLUMN

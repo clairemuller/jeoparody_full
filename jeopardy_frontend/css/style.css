@@ -22,6 +22,7 @@ body {
 }
 
 #wrapper {
+  display: block;
 }
 
 div.column {
@@ -71,5 +72,5 @@ div.clue {
   font-size: 70px;
   color: #ffffff;
   /* padding: 15%; */
-  margin: 15% auto;
+  margin: 15% 10%;
 }
