@@ -46,6 +46,10 @@ function renderClues(category, column) {
 
     // ADD EVENT LISTENER
     clueDiv.addEventListener('click', () => {
+      // REMOVE EVENT LISTENER
+      if (clueDiv.innerText === '') {
+        return;
+      }
       clueDiv.innerText = '';
       displayQuestion(clue);
       setTimeout(() => displayAnswer(clue), 2000);
