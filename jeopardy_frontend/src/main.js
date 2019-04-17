@@ -3,12 +3,7 @@ const overlay = document.createElement('div');
 overlay.classList.add('overlay');
 const overlayContent = document.createElement('div');
 overlayContent.classList.add('overlay-content');
-overlay.appendChild(overlayContent)
-// let questionDiv = document.createElement('div');
-// questionDiv.classList.add('question');
-// let answerDiv = document.createElement('div');
-// answerDiv.classList.add('answer');
-
+overlay.appendChild(overlayContent);
 
 fetch('http://localhost:3000/categories')
 .then(res => res.json())
@@ -47,12 +42,13 @@ function renderClues(category, column) {
     // ADD EVENT LISTENER
     clueDiv.addEventListener('click', () => {
       // REMOVE EVENT LISTENER
-      if (clueDiv.innerText === '') {
+      if (clueDiv.classList.contains('clicked')) {
         return;
       }
-      clueDiv.innerText = '';
+      clueDiv.classList.add('clicked')
+
       displayQuestion(clue);
-      setTimeout(() => displayAnswer(clue), 2000);
+      setTimeout(() => displayAnswer(clue), 1000);
     })
 
     column.appendChild(clueDiv);
@@ -68,7 +64,7 @@ function displayQuestion(clue) {
 
 function displayAnswer(clue) {
   overlayContent.innerText = clue.answer.toUpperCase();
-  setTimeout(() => finishClue(), 2000);
+  setTimeout(() => finishClue(), 1000);
 }
 
 function finishClue() {

@@ -39,16 +39,21 @@ div.column div {
   background-color: #0731af;
 }
 
-div.title {
+.title {
   color: #ffffff;
-  font-size: 35px;
+  font-size: 32px;
   text-shadow: 2px 2px #000000;
 }
 
-div.clue {
+.clue {
   color: #ead81c;
   font-size: 90px;
   text-shadow: 5px 5px #000000;
+}
+
+.clicked {
+  color: #0731af;
+  text-shadow: 5px 5px #0731af;
 }
 
 .clue:hover {
