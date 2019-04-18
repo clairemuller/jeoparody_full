@@ -4,16 +4,15 @@ overlay.classList.add('overlay');
 const overlayContent = document.createElement('div');
 overlayContent.classList.add('overlay-content');
 overlay.appendChild(overlayContent);
-let intro = document.createElement('div');
 
 fetch('http://localhost:3000/categories')
 .then(res => res.json())
 .then(categories => {
   introDisplay(intro);
-  setTimeout(() => renderNewGame(categories), 5000);
+  setTimeout(() => renderNewGame(categories), 4000);
 });
 
-// CREATE CLUES FOR COLUMN
+// 6 - CREATE CLUES FOR COLUMN
 function renderClues(category, column) {
 
   // CREATE EACH CLUE
@@ -43,7 +42,7 @@ function renderClues(category, column) {
   }
 }
 
-// REMOVE HTML TAGS & ESCAPE CHARS
+// 8 - REMOVE HTML TAGS & ESCAPE CHARS
 function removeHTML(element) {
   if (element.includes('<i>')) {
     element = element.replace(/<[^>]*>/g, '');
@@ -54,7 +53,7 @@ function removeHTML(element) {
   return element;
 }
 
-// ON CLICK DISPLAY QUESTION
+// 7 - ON CLICK DISPLAY QUESTION
 function displayQuestion(clue) {
   clue.question = removeHTML(clue.question)
   wrapper.style.display = 'none';
@@ -78,14 +77,7 @@ function finishClue() {
 
 ///////////////// GAME SET UP /////////////////
 
-// DISPLAY JEOPARDY INTRO
-function introDisplay(intro) {
-  intro.classList.add('intro');
-  intro.textContent = 'JEOPARDY';
-  document.body.appendChild(intro);
-}
-
-// CREATE NEW GAME BOARD
+// 2 - CREATE NEW GAME BOARD
 function renderNewGame(categories) {
   document.body.removeChild(intro);
   categories = fixClueCount(categories);
@@ -100,7 +92,7 @@ function renderNewGame(categories) {
     renderColumn(category));
 }
 
-// CREATE COLUMN
+// 5 - CREATE COLUMN
 function renderColumn(category) {
   const wrapper = document.querySelector('div');
   const column = document.createElement('div');
@@ -115,7 +107,7 @@ function renderColumn(category) {
   wrapper.appendChild(column);
 }
 
-// REMOVE CATEGORIES WITH LESS THAN 5 CLUES
+// 3 - REMOVE CATEGORIES WITH LESS THAN 5 CLUES
 function fixClueCount(categories) {
   const newCats = categories.filter(category => {
     return category.clues.length >= 5;
@@ -123,7 +115,7 @@ function fixClueCount(categories) {
   return newCats;
 }
 
-// GET FIVE RANDOM CATEGORIES OR CLUES
+// 4 - GET FIVE RANDOM CATEGORIES OR CLUES
 function getFive(arr) {
   let five = [];
   let numsUsed = [];

@@ -23,6 +23,7 @@ body {
 
 #wrapper {
   display: block;
+  width: 88%;
 }
 
 div.column {
@@ -94,4 +95,6 @@ div.column div {
   font-size: 200px;
   color: #ffffff;
   margin: 15% auto;
+  transition: all 3s ease-in 1s;
+  /* transition: transform 1s; */
 }
