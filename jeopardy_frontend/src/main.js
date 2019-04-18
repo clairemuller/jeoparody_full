@@ -1,21 +1,16 @@
 let introDiv = document.getElementById('intro');
 let form = document.getElementById('login');
 let gameDiv = document.getElementById('game');
+let overlay = document.getElementById('overlay');
+let overlayContent = document.getElementById('overlay-content');
 
-// CREATES OVERLAY FOR DISPLAYING QUES & ANSWERS
-const overlay = document.createElement('div');
-overlay.classList.add('overlay');
-const overlayContent = document.createElement('div');
-overlayContent.classList.add('overlay-content');
-overlay.appendChild(overlayContent);
-
-// WHEN USER CLICKS PLAY NEW GAME
+// 1 - USER CLICKS PLAY NEW GAME
 document.getElementById('submit').addEventListener("click", function(e){
   e.preventDefault();
   findUser();
 })
 
-// FIND OR CREATE USER; CREATE NEW GAME
+// 2 - FIND OR CREATE USER; CREATE NEW GAME
 function findUser() {
   let username = document.getElementById('username').value;
   fetch('http://localhost:3000/users', {
@@ -29,18 +24,16 @@ function findUser() {
   startFetch();
 }
 
-// ONCE LOGGED IN
+// 3 - ONCE LOGGED IN
 function startFetch() {
-  console.log('start fetch');
   fetch('http://localhost:3000/categories')
   .then(res => res.json())
   .then(categories => {
-    console.log('end fetch');
     renderNewGame(categories)
   });
 }
 
-// 2 - CREATE NEW GAME BOARD
+// 4 - CREATE NEW GAME BOARD
 function renderNewGame(categories) {
   introDiv.style.display = 'none';
   gameDiv.style.display = 'block';
@@ -56,7 +49,7 @@ function renderNewGame(categories) {
     renderColumn(category));
 }
 
-// 3 - REMOVE CATEGORIES WITH LESS THAN 5 CLUES
+// 5 - REMOVE CATEGORIES WITH LESS THAN 5 CLUES
 function fixClueCount(categories) {
   const newCats = categories.filter(category => {
     return category.clues.length >= 5;
@@ -64,7 +57,7 @@ function fixClueCount(categories) {
   return newCats;
 }
 
-// 4 - GET FIVE RANDOM CATEGORIES OR CLUES
+// 6 - GET FIVE RANDOM CATEGORIES OR CLUES
 function getFive(arr) {
   let five = [];
   let numsUsed = [];
@@ -78,7 +71,7 @@ function getFive(arr) {
   return five;
 }
 
-// 5 - CREATE COLUMN
+// 7 - CREATE COLUMN
 function renderColumn(category) {
   const column = document.createElement('div');
   const title = document.createElement('div');
@@ -92,7 +85,7 @@ function renderColumn(category) {
   gameDiv.appendChild(column);
 }
 
-// 6 - CREATE CLUES FOR COLUMN
+// 8 - CREATE CLUES FOR COLUMN
 function renderClues(category, column) {
 
   // CREATE EACH CLUE
@@ -122,7 +115,7 @@ function renderClues(category, column) {
   }
 }
 
-// 7 - ON CLICK DISPLAY QUESTION
+// 9 - ON CLICK DISPLAY QUESTION
 function displayQuestion(clue) {
   clue.question = removeHTML(clue.question)
   gameDiv.style.display = 'none';
@@ -131,7 +124,7 @@ function displayQuestion(clue) {
   document.body.appendChild(overlay);
 }
 
-// 7.5 - REMOVE HTML TAGS & ESCAPE CHARS
+// 9.5 - REMOVE HTML TAGS & ESCAPE CHARS
 function removeHTML(element) {
   if (element.includes('<i>')) {
     element = element.replace(/<[^>]*>/g, '');
@@ -142,14 +135,14 @@ function removeHTML(element) {
   return element;
 }
 
-// 8 - AFTER 5 SECONDS DISPLAY ANSWER
+// 10 - AFTER 5 SECONDS DISPLAY ANSWER
 function displayAnswer(clue) {
   clue.answer = removeHTML(clue.answer)
   overlayContent.innerText = clue.answer.toUpperCase();
   setTimeout(() => finishClue(), 2000);
 }
 
-// 9 - BRING BACK GAME BOARD
+// 11 - BRING BACK GAME BOARD
 function finishClue() {
   document.body.removeChild(overlay);
   gameDiv.style.display = 'block';

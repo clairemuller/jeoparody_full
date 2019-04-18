@@ -63,7 +63,7 @@ div.column div {
 }
 
 /* DISPLAYS QUESTIONS AND ANSWERS */
-.overlay {
+#overlay {
   display: none;
   position: fixed;
   z-index: 1;
@@ -75,7 +75,7 @@ div.column div {
   transform: translate(-50%,-50%);
 }
 
-.overlay-content {
+#overlay-content {
   font-family: Optima;
   font-size: 70px;
   color: #ffffff;
