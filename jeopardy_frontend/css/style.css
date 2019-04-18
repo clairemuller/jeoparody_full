@@ -11,7 +11,6 @@
 
 * {
   box-sizing: border-box;
-  background-color: #000000;
 }
 
 body {
@@ -19,10 +18,11 @@ body {
   padding: 0;
   width: 100%; /* full window width */
   text-align: center;
+  background: black;
 }
 
-#wrapper {
-  display: block;
+#game {
+  display: none;
   width: 88%;
 }
 
@@ -62,8 +62,9 @@ div.column div {
   cursor: pointer;
 }
 
+/* DISPLAYS QUESTIONS AND ANSWERS */
 .overlay {
-  display: none; /* hidden by default */
+  display: none;
   position: fixed;
   z-index: 1;
   top: 50%;
@@ -78,11 +79,10 @@ div.column div {
   font-family: Optima;
   font-size: 70px;
   color: #ffffff;
-  /* padding: 15%; */
   margin: 15% 10%;
 }
 
-.intro {
+#intro {
   display: block;
   position: fixed;
   z-index: 1;
@@ -91,10 +91,22 @@ div.column div {
   height: 100%;
   width: 100%;
   transform: translate(-50%,-50%);
+  /* transition: all 3s ease-in 1s; */
+}
+
+#logo {
   font-family: Gyparody;
-  font-size: 200px;
-  color: #ffffff;
-  margin: 15% auto;
-  transition: all 3s ease-in 1s;
-  /* transition: transform 1s; */
+  color: white;
+  font-size: 230px;
+  font-weight: normal;
+  margin: 30px;
+}
+
+#login {
+  font-family: Optima;
+  color: white;
+  font-size: 30px;
+  width: 30%;
+  margin: auto;
+  border: 1px solid white;
 }

@@ -1,8 +1,9 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:destroy]
+  # before_action :set_user, only: [:destroy]
 
   def index
     @users = User.all
+    render json: @users
   end
 
   def new
@@ -10,25 +11,20 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create(user_params)
-    if @user.valid?
-      session[:user_id] = @user.id
-      redirect_to "/users/#{@user.id}/profile"
-    else
-      render :new
-    end
+    @user = User.find_or_create_by(username: params["username"])
+    @game = Game.create({score: 0, user_id: @user.id})
+    render json: @user
   end
 
   def destroy
     @user.delete
-    # redirect_to '/'
   end
 
   private
 
-  def user_params
-    params.require(:user).permit(:username)
-  end
+  # def user_params
+  #   params.require(:user).permit(:username)
+  # end
 
   def set_user
     @user = User.find(params[:id])
