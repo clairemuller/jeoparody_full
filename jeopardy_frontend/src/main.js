@@ -9,25 +9,30 @@ sidebar.id = 'sidebar';
 sidebar.innerHTML = `SCORE<br>$${score}`
 let currentClue = "";
 let clickedCount = 0;
+let currentUser = '';
 
 // 1 - USER CLICKS PLAY NEW GAME
 document.getElementById('submit').addEventListener("click", function(e){
   e.preventDefault();
-  findUser();
+  username = document.getElementById('username').value.toLowerCase();
+  findUser(username)
+  startFetch();
 })
 
 // 2 - FIND OR CREATE USER; CREATE NEW GAME
-function findUser() {
-  let username = document.getElementById('username').value;
-  fetch('http://localhost:3000/users', {
+function findUser(username) {
+  return fetch('http://localhost:3000/users', {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json"
     },
-    body: JSON.stringify({username: username.toLowerCase()})
+    body: JSON.stringify({username: username})
   })
-  startFetch();
+  .then(res => res.json())
+  .then(user => {
+    currentUser = user;
+  })
 }
 
 // 3 - ONCE LOGGED IN
@@ -195,15 +200,34 @@ function finishClue() {
   question.textContent = '';
   answer.textContent = '';
   correct.textContent = '';
-  
-  overlay.style.display = 'none';
-  gameDiv.style.display = 'block';
 
   if (clickedCount === 25) {
     setTimeout(() => endGame(), 1000);
+  } else {
+    overlay.style.display = 'none';
+    gameDiv.style.display = 'block';
   }
 }
 
 function endGame() {
-  alert('GAME OVER')
+  updateDbScore();
+  question.textContent = "GAME OVER!";
+  answer.textContent = `FINAL SCORE: $${score}`;
 }
+
+function updateDbScore() {
+  fetch(`http://localhost:3000/users/${currentUser.id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({username: currentUser.username, score: score})
+  })
+}
+
+
+
+
+
+// end

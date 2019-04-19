@@ -16,6 +16,12 @@ class UsersController < ApplicationController
     render json: @user
   end
 
+  def update
+    @user = User.find_by(username: params["username"])
+    @game = @user.games.last
+    @game.update(score: params["score"])
+  end
+
   def destroy
     @user.delete
   end

@@ -1,6 +1,6 @@
-
-####### SEEDING FROM API - TOOK TWO HOURS #######
-
+#
+# ###### SEEDING FROM API - TOOK TWO HOURS #######
+#
 # def create_clue(clue)
 #   if !Clue.find_by(question: clue["question"])
 #     newCat = Category.find_or_create_by({
