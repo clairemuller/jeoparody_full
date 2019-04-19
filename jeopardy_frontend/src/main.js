@@ -2,7 +2,11 @@ let introDiv = document.getElementById('intro');
 let form = document.getElementById('login');
 let gameDiv = document.getElementById('game');
 let overlay = document.getElementById('overlay');
-let overlayContent = document.getElementById('overlay-content');
+let score = 0;
+let sidebar = document.createElement('div');
+sidebar.id = 'sidebar';
+sidebar.innerHTML = `SCORE<br>$${score}`
+let currentClue = "";
 
 // 1 - USER CLICKS PLAY NEW GAME
 document.getElementById('submit').addEventListener("click", function(e){
@@ -19,18 +23,35 @@ function findUser() {
       "Content-Type": "application/json",
       "Accept": "application/json"
     },
-    body: JSON.stringify({username: username})
+    body: JSON.stringify({username: username.toLowerCase()})
   })
   startFetch();
 }
 
 // 3 - ONCE LOGGED IN
 function startFetch() {
+  displayRules();
   fetch('http://localhost:3000/categories')
   .then(res => res.json())
   .then(categories => {
-    renderNewGame(categories)
+    setTimeout(() => renderNewGame(categories), 2000);
   });
+}
+
+// 3.5 - DISPLAY RULES FOR 5 SECONDS
+function displayRules() {
+  let rulesP = document.createElement('p');
+  rulesP.id = 'rules';
+  rulesP.innerHTML = `
+    <hr>
+    <h2>HERE'S HOW THIS WORKS:</h2>\
+    YOU'RE COMPETING AGAINST YOURSELF!<br>\
+    ONCE YOU SELECT A CLUE, YOU HAVE 7 SECONDS<br>\
+    TO COME UP WITH THE ANSWER<br>\
+    <h2>HAVE FUN!</h2>\
+    `;
+  introDiv.removeChild(form);
+  introDiv.appendChild(rulesP);
 }
 
 // 4 - CREATE NEW GAME BOARD
@@ -45,8 +66,8 @@ function renderNewGame(categories) {
     }
     return category;
   })
-  categories.forEach(category =>
-    renderColumn(category));
+  categories.forEach(category => renderColumn(category));
+  gameDiv.appendChild(sidebar);
 }
 
 // 5 - REMOVE CATEGORIES WITH LESS THAN 5 CLUES
@@ -91,24 +112,23 @@ function renderClues(category, column) {
   // CREATE EACH CLUE
   let dollar = 0;
   for (let i = 0; i < category.clues.length; i++) {
-    dollar += 200;
-    const clue = category.clues[i];
-
+    dollar += 200
     // ADD DOLLAR AMOUNT
     const clueDiv = document.createElement('div');
     clueDiv.classList.add('clue');
+    clueDiv.id = dollar
     clueDiv.innerText = `$${dollar}`;
 
     // ADD EVENT LISTENER
     clueDiv.addEventListener('click', () => {
+      currentClue = category.clues[i];
+      currentClue["dollar"] = clueDiv.id;
       // REMOVE EVENT LISTENER
       if (clueDiv.classList.contains('clicked')) {
         return;
       }
-      clueDiv.classList.add('clicked')
-
-      displayQuestion(clue);
-      setTimeout(() => displayAnswer(clue), 2000);
+      clueDiv.classList.add('clicked');
+      displayQuestion();
     })
 
     column.appendChild(clueDiv);
@@ -116,12 +136,13 @@ function renderClues(category, column) {
 }
 
 // 9 - ON CLICK DISPLAY QUESTION
-function displayQuestion(clue) {
-  clue.question = removeHTML(clue.question)
+function displayQuestion() {
+  currentClue.question = removeHTML(currentClue.question);
   gameDiv.style.display = 'none';
   overlay.style.display = 'block';
-  overlayContent.innerText = clue.question.toUpperCase();
-  document.body.appendChild(overlay);
+  let questionDiv = document.getElementById('question');
+  questionDiv.innerText = currentClue.question.toUpperCase();
+  setTimeout(() => displayAnswer(), 2000);
 }
 
 // 9.5 - REMOVE HTML TAGS & ESCAPE CHARS
@@ -136,14 +157,42 @@ function removeHTML(element) {
 }
 
 // 10 - AFTER 5 SECONDS DISPLAY ANSWER
-function displayAnswer(clue) {
-  clue.answer = removeHTML(clue.answer)
-  overlayContent.innerText = clue.answer.toUpperCase();
-  setTimeout(() => finishClue(), 2000);
+function displayAnswer() {
+  currentClue.answer = removeHTML(currentClue.answer);
+  let answerDiv = document.getElementById('answer');
+  answerDiv.innerText = currentClue.answer.toUpperCase();
+  setTimeout(() => correct(), 2000);
+}
+
+function correct() {
+  let correctDiv = document.getElementById('correct');
+  correctDiv.innerText = 'CORRECT? Y/N';
+  document.body.addEventListener("keydown", yesOrNo);
+}
+
+function yesOrNo() {
+  // IF YES
+  if (event.keyCode === 89) {
+    score += parseInt(currentClue.dollar);
+    sidebar.innerHTML = `SCORE<br>$${score}`;
+    finishClue();
+  }
+  // IF NO
+  if (event.keyCode === 78) {
+    finishClue();
+  }
 }
 
 // 11 - BRING BACK GAME BOARD
 function finishClue() {
-  document.body.removeChild(overlay);
+
+  document.body.removeEventListener("keydown", yesOrNo);
+  let question = document.getElementById('question');
+  let answer = document.getElementById('answer');
+  let correct = document.getElementById('correct');
+  question.textContent = '';
+  answer.textContent = '';
+  correct.textContent = '';
+  overlay.style.display = 'none';
   gameDiv.style.display = 'block';
 }

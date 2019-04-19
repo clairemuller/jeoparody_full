@@ -71,15 +71,27 @@ div.column div {
   left: 50%;
   height: 100%;
   width: 100%;
-  overflow: auto;
+  /* overflow: auto; */
   transform: translate(-50%,-50%);
 }
 
-#overlay-content {
+.overlay-content {
   font-family: Optima;
-  font-size: 70px;
+  font-size: 50px;
   color: #ffffff;
-  margin: 15% 10%;
+}
+
+#question {
+  height: 40%;
+  margin: 3% 5%;
+}
+
+#answer {
+  height: 20%;
+}
+
+#correct {
+  height: 20%;
 }
 
 #intro {
@@ -91,7 +103,6 @@ div.column div {
   height: 100%;
   width: 100%;
   transform: translate(-50%,-50%);
-  /* transition: all 3s ease-in 1s; */
 }
 
 #logo {
@@ -100,6 +111,7 @@ div.column div {
   font-size: 230px;
   font-weight: normal;
   margin: 30px;
+  transition: all 3s ease-in 1s;
 }
 
 #login {
@@ -109,4 +121,20 @@ div.column div {
   width: 30%;
   margin: auto;
   border: 1px solid white;
+}
+
+#rules {
+  color: white;
+  font-family: Optima;
+  font-size: 30px;
+}
+
+#sidebar {
+  display: inline-block;
+  margin: auto;
+  height: 100%;
+  position: fixed;
+  color: white;
+  font-family: Optima;
+  font-size: 40px
 }
