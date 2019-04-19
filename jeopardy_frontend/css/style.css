@@ -76,22 +76,26 @@ div.column div {
 }
 
 .overlay-content {
+  font-weight: bold;
   font-family: Optima;
   font-size: 50px;
   color: #ffffff;
+  margin: 3%;
 }
 
 #question {
-  height: 40%;
-  margin: 3% 5%;
+  /* height: 40%; */
+  /* margin: 3% 5%; */
+  /* margin: 2%; */
 }
 
 #answer {
-  height: 20%;
+  color: #ead81c;
+  /* height: 20%; */
 }
 
 #correct {
-  height: 20%;
+  /* height: 20%; */
 }
 
 #intro {
@@ -131,10 +135,11 @@ div.column div {
 
 #sidebar {
   display: inline-block;
-  margin: auto;
+  margin: 1%;
   height: 100%;
   position: fixed;
   color: white;
   font-family: Optima;
-  font-size: 40px
+  font-size: 40px;
+  width: 10%;
 }

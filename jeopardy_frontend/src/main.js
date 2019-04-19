@@ -2,11 +2,13 @@ let introDiv = document.getElementById('intro');
 let form = document.getElementById('login');
 let gameDiv = document.getElementById('game');
 let overlay = document.getElementById('overlay');
+let overlayContent = document.getElementById('overlay-content');
 let score = 0;
 let sidebar = document.createElement('div');
 sidebar.id = 'sidebar';
 sidebar.innerHTML = `SCORE<br>$${score}`
 let currentClue = "";
+let clickedCount = 0;
 
 // 1 - USER CLICKS PLAY NEW GAME
 document.getElementById('submit').addEventListener("click", function(e){
@@ -34,7 +36,8 @@ function startFetch() {
   fetch('http://localhost:3000/categories')
   .then(res => res.json())
   .then(categories => {
-    setTimeout(() => renderNewGame(categories), 2000);
+    // setTimeout(() => renderNewGame(categories), 2000);
+    renderNewGame(categories)
   });
 }
 
@@ -108,7 +111,6 @@ function renderColumn(category) {
 
 // 8 - CREATE CLUES FOR COLUMN
 function renderClues(category, column) {
-
   // CREATE EACH CLUE
   let dollar = 0;
   for (let i = 0; i < category.clues.length; i++) {
@@ -118,7 +120,6 @@ function renderClues(category, column) {
     clueDiv.classList.add('clue');
     clueDiv.id = dollar
     clueDiv.innerText = `$${dollar}`;
-
     // ADD EVENT LISTENER
     clueDiv.addEventListener('click', () => {
       currentClue = category.clues[i];
@@ -128,9 +129,9 @@ function renderClues(category, column) {
         return;
       }
       clueDiv.classList.add('clicked');
+      clickedCount += 1;
       displayQuestion();
     })
-
     column.appendChild(clueDiv);
   }
 }
@@ -142,7 +143,8 @@ function displayQuestion() {
   overlay.style.display = 'block';
   let questionDiv = document.getElementById('question');
   questionDiv.innerText = currentClue.question.toUpperCase();
-  setTimeout(() => displayAnswer(), 2000);
+  // setTimeout(() => displayAnswer(), 2000);
+  displayAnswer();
 }
 
 // 9.5 - REMOVE HTML TAGS & ESCAPE CHARS
@@ -161,7 +163,8 @@ function displayAnswer() {
   currentClue.answer = removeHTML(currentClue.answer);
   let answerDiv = document.getElementById('answer');
   answerDiv.innerText = currentClue.answer.toUpperCase();
-  setTimeout(() => correct(), 2000);
+  // setTimeout(() => correct(), 2000);
+  correct();
 }
 
 function correct() {
@@ -185,7 +188,6 @@ function yesOrNo() {
 
 // 11 - BRING BACK GAME BOARD
 function finishClue() {
-
   document.body.removeEventListener("keydown", yesOrNo);
   let question = document.getElementById('question');
   let answer = document.getElementById('answer');
@@ -193,6 +195,15 @@ function finishClue() {
   question.textContent = '';
   answer.textContent = '';
   correct.textContent = '';
+  
   overlay.style.display = 'none';
   gameDiv.style.display = 'block';
+
+  if (clickedCount === 25) {
+    setTimeout(() => endGame(), 1000);
+  }
+}
+
+function endGame() {
+  alert('GAME OVER')
 }
