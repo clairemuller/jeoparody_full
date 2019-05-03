@@ -24,7 +24,6 @@
 #   clues = JSON.parse(response_string)
 #
 #   clues.each do |clue|
-#     # makes sure no field is empty
 #     if clue.key?("question") && clue.key?("answer") && clue.key?("category")
 #       if !clue["question"].empty? && !clue["answer"].empty? && !clue["category"]["title"].empty?
 #         create_clue(clue)

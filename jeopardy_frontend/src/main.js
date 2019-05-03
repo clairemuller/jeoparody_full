@@ -1,3 +1,5 @@
+const baseURL = 'http://localhost:3000/';
+const herokuURL = 'https://jeoparody.herokuapp.com/';
 let introDiv = document.getElementById('intro');
 let form = document.getElementById('login');
 let gameDiv = document.getElementById('game');
@@ -6,7 +8,7 @@ let overlayContent = document.getElementById('overlay-content');
 let score = 0;
 let sidebar = document.createElement('div');
 sidebar.id = 'sidebar';
-sidebar.innerHTML = `SCORE<br>$${score}`
+sidebar.innerHTML = `SCORE<br>$${score}`;
 let currentClue = "";
 let clickedCount = 0;
 let currentUser = '';
@@ -15,13 +17,12 @@ let currentUser = '';
 document.getElementById('submit').addEventListener("click", function(e){
   e.preventDefault();
   username = document.getElementById('username').value.toLowerCase();
-  findUser(username)
-  startFetch();
+  findUser(username);
 })
 
 // 2 - FIND OR CREATE USER; CREATE NEW GAME
 function findUser(username) {
-  return fetch('http://localhost:3000/users', {
+  fetch(herokuURL + 'users', {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -33,16 +34,16 @@ function findUser(username) {
   .then(user => {
     currentUser = user;
   })
+  startFetch();
 }
 
 // 3 - ONCE LOGGED IN
 function startFetch() {
   displayRules();
-  fetch('http://localhost:3000/categories')
+  fetch(herokuURL + 'categories')
   .then(res => res.json())
   .then(categories => {
-    // setTimeout(() => renderNewGame(categories), 2000);
-    renderNewGame(categories)
+    setTimeout(() => renderNewGame(categories), 5000);
   });
 }
 
@@ -104,10 +105,12 @@ function getFive(arr) {
 function renderColumn(category) {
   const column = document.createElement('div');
   const title = document.createElement('div');
+  const titleP = document.createElement('p');
 
   column.classList.add('column');
-  title.classList.add('title');
-  title.textContent = category.title.toUpperCase();
+  titleP.classList.add('title');
+  titleP.textContent = category.title.toUpperCase();
+  title.appendChild(titleP);
   column.appendChild(title);
 
   renderClues(category, column)
@@ -148,11 +151,10 @@ function displayQuestion() {
   overlay.style.display = 'block';
   let questionDiv = document.getElementById('question');
   questionDiv.innerText = currentClue.question.toUpperCase();
-  // setTimeout(() => displayAnswer(), 2000);
-  displayAnswer();
+  setTimeout(() => displayAnswer(), 7000);
 }
 
-// 9.5 - REMOVE HTML TAGS & ESCAPE CHARS
+// 9.5 - REMOVE HTML TAGS & ESCAPE CHARACTERS
 function removeHTML(element) {
   if (element.includes('<i>')) {
     element = element.replace(/<[^>]*>/g, '');
@@ -163,21 +165,22 @@ function removeHTML(element) {
   return element;
 }
 
-// 10 - AFTER 5 SECONDS DISPLAY ANSWER
+// 10 - AFTER 7 SECONDS DISPLAY ANSWER
 function displayAnswer() {
   currentClue.answer = removeHTML(currentClue.answer);
   let answerDiv = document.getElementById('answer');
   answerDiv.innerText = currentClue.answer.toUpperCase();
-  // setTimeout(() => correct(), 2000);
-  correct();
+  setTimeout(() => correct(), 2000);
 }
 
+// 11 - AFTER 2 SECONDS DISPLAY Y/N
 function correct() {
   let correctDiv = document.getElementById('correct');
-  correctDiv.innerText = 'CORRECT? Y/N';
+  correctDiv.innerText = 'WERE YOU CORRECT? Y/N';
   document.body.addEventListener("keydown", yesOrNo);
 }
 
+// 12 - USER KEYS Y OR N
 function yesOrNo() {
   // IF YES
   if (event.keyCode === 89) {
@@ -191,7 +194,7 @@ function yesOrNo() {
   }
 }
 
-// 11 - BRING BACK GAME BOARD
+// 13 - BRING BACK GAME BOARD
 function finishClue() {
   document.body.removeEventListener("keydown", yesOrNo);
   let question = document.getElementById('question');
@@ -201,6 +204,7 @@ function finishClue() {
   answer.textContent = '';
   correct.textContent = '';
 
+  // IF NO MORE CLUES
   if (clickedCount === 25) {
     setTimeout(() => endGame(), 1000);
   } else {
@@ -209,14 +213,16 @@ function finishClue() {
   }
 }
 
+// 14 - SHOW FINAL SCORE
 function endGame() {
   updateDbScore();
   question.textContent = "GAME OVER!";
   answer.textContent = `FINAL SCORE: $${score}`;
 }
 
+// 15 - UPDATE DATABASE
 function updateDbScore() {
-  fetch(`http://localhost:3000/users/${currentUser.id}`, {
+  fetch(herokuURL + `users/${currentUser.id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -225,9 +231,3 @@ function updateDbScore() {
     body: JSON.stringify({username: currentUser.username, score: score})
   })
 }
-
-
-
-
-
-// end
